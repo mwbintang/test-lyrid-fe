@@ -1,22 +1,41 @@
 import React from "react";
 import { useState } from "react";
-import { useRouter } from "next/router"
+import { useRouter } from "next/router";
 import { login } from "../../services/login";
 import noAuth from "../protected/noAuth";
+import Swal from "sweetalert2";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const router = useRouter()
+  const router = useRouter();
 
   const handleLogin = async () => {
-    const data = await login(email, password)
-    console.log(data,'dataaaaaa')
-    if(data) router.push("/")
+    const data = await login(email, password);
+    console.log(data, "dataaaaaa");
+    if (data) router.push("/");
+    else {
+      const Toast = Swal.mixin({
+        toast: true,
+        position: "top-end",
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true,
+        didOpen: (toast) => {
+          toast.addEventListener("mouseenter", Swal.stopTimer);
+          toast.addEventListener("mouseleave", Swal.resumeTimer);
+        },
+      });
+      Toast.fire({
+        icon: "warning",
+        title: "Gagal Login",
+        text: "Gagal Login",
+      });
+    }
   };
   const goToRegister = () => {
     // Use router.push to navigate to the registration page
-    router.push('/register');
+    router.push("/register");
   };
   return (
     <div className="container mt-5">
@@ -65,10 +84,10 @@ const Login = () => {
             </div>
             <div className="card-footer text-center">
               <p>
-                If you don't have an account, go to{' '}
+                If you don't have an account, go to{" "}
                 <span
                   className="text-primary"
-                  style={{ cursor: 'pointer' }}
+                  style={{ cursor: "pointer" }}
                   onClick={goToRegister}
                 >
                   register

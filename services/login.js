@@ -12,7 +12,7 @@ export async function login(identifier, password) {
     });
 
     if (data) {
-      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("token", data.access_token);
       localStorage.setItem("id", data.id);
       localStorage.setItem("role", data.role);
       return true;

@@ -1,27 +1,107 @@
 import React, { useState } from "react";
+import {
+  postDataEmployee,
+  editDataEmployee,
+  getEmployeeManagementById,
+} from "../../services/employee-management";
+import {
+  getUserManagementById,
+  postDataUser,
+  editDataUser,
+} from "../../services/user-management";
+import { useRouter } from "next/router";
+import { upload } from "../../services/image";
+import { useEffect } from "react";
 
 const Registration = (props) => {
+  const router = useRouter();
+  let role = localStorage.getItem("role");
+  let id = localStorage.getItem("id");
   const [selectedFile, setSelectedFile] = useState(null);
   const [formData, setFormData] = useState({
-    name: "",
+    username: "",
     email: "",
     password: "",
     role: "user",
-    phoneNumber: "",
+    phone_number: "",
     address: "",
+    photo_url: "",
   });
+
   const title = props.name == "edit" ? "Edit Profile" : "Registration";
   const titleButton = props.name == "edit" ? "Edit" : "Register";
+  const getDataById = async () => {
+    try {
+      if (props.name == "edit") {
+        let value;
+        // console.log(type, "typeeeeee");
+        if (role == "user_management") {
+          console.log("teeeeeeeeeeeest");
+          value = await getUserManagementById(id);
+        } else {
+          value = await getEmployeeManagementById(id);
+        }
+        console.log(value, "value");
+        setFormData(value);
+      }
+    } catch (e) {
+      console.log(e, "erroooooooooor");
+    }
+  };
+
+  useEffect(() => {
+    getDataById();
+  }, []);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(formData);
-    // Add your registration logic here (e.g., send data to an API)
+    if (props.name == "edit") {
+      if (role == "user_management") {
+        if (selectedFile) {
+          let uploadPic = new FormData();
+          uploadPic.append("img", selectedFile);
+          let dataPic = await upload(uploadPic);
+          if (dataPic) formData.photo_url = dataPic.filename;
+        }
+        const data = await editDataUser(formData, id);
+        if (data) router.push("/");
+      } else {
+        if (selectedFile) {
+          let uploadPic = new FormData();
+          uploadPic.append("img", selectedFile);
+          let dataPic = await upload(uploadPic);
+          if (dataPic) formData.photo_url = dataPic.filename;
+        }
+        const data = await editDataEmployee(formData, id);
+        if (data) router.push("/");
+      }
+    } else {
+      if (role == "user_management") {
+        if (selectedFile) {
+          let uploadPic = new FormData();
+          uploadPic.append("img", selectedFile);
+          let dataPic = await upload(uploadPic);
+          if (dataPic) formData.photo_url = dataPic.filename;
+        }
+        const data = await postDataUser(formData);
+        if (data) router.push("/login");
+      } else {
+        if (selectedFile) {
+          let uploadPic = new FormData();
+          uploadPic.append("img", selectedFile);
+          let dataPic = await upload(uploadPic);
+          if (dataPic) formData.photo_url = dataPic.filename;
+        }
+        let data = await postDataEmployee(formData);
+        if (data) router.push("/login");
+      }
+    }
   };
   const handleFileChange = (event) => {
     const file = event.target.files[0];
@@ -40,8 +120,8 @@ const Registration = (props) => {
             type="text"
             className="form-control"
             id="name"
-            name="name"
-            value={formData.name}
+            name="username"
+            value={formData.username}
             onChange={handleChange}
             required
           />
@@ -80,8 +160,8 @@ const Registration = (props) => {
             type="tel"
             className="form-control"
             id="phoneNumber"
-            name="phoneNumber"
-            value={formData.phoneNumber}
+            name="phone_number"
+            value={formData.phone_number}
             onChange={handleChange}
             placeholder="Enter your phone number"
           />
