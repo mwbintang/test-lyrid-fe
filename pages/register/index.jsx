@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Registration from '../components/registration';
+import noAuth from '../protected/noAuth';
 
 function Register() {
   return (
@@ -13,4 +14,4 @@ function Register() {
   );
 }
 
-export default Register;
+export default noAuth(Register);

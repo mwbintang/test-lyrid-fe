@@ -5,6 +5,7 @@ import { getUserManagementById } from "../../../../services/user-management";
 import { getEmployeeManagementById } from "../../../../services/employee-management";
 import { useRouter } from "next/router";
 import { getImage } from "../../../../services/image";
+import Auth from "../../../protected/auth";
 
 function UserProfile() {
   const router = useRouter();
@@ -122,4 +123,4 @@ function UserProfile() {
   );
 }
 
-export default UserProfile;
+export default Auth(UserProfile);

@@ -2,12 +2,13 @@ import React from "react";
 import { useRouter } from "next/router";
 
 const NavBarCustom = () => {
-    const router = useRouter()
+  const router = useRouter();
   const handleNav = (param) => {
-    console.log(param,"paraaaaaaaaam")
+    console.log(param, "paraaaaaaaaam");
     // Use router.push to navigate to the registration page
     if (param == "logout") {
-        console.log(param)
+      localStorage.clear();
+      router.push("/login");
     } else {
       router.push(param);
     }
@@ -32,24 +33,19 @@ const NavBarCustom = () => {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav ml-auto">
             <li className="nav-item" onClick={() => handleNav("/")}>
-              <a className="nav-link">
-                Employee Management
-              </a>
+              <a className="nav-link">Employee Management</a>
             </li>
-            <li className="nav-item" onClick={() => handleNav("/user-management")}>
-              <a className="nav-link">
-                User Management
-              </a>
+            <li
+              className="nav-item"
+              onClick={() => handleNav("/user-management")}
+            >
+              <a className="nav-link">User Management</a>
             </li>
             <li className="nav-item" onClick={() => handleNav("/edit-profile")}>
-              <a className="nav-link">
-                Edit Profile
-              </a>
+              <a className="nav-link">Edit Profile</a>
             </li>
             <li className="nav-item" onClick={() => handleNav("logout")}>
-              <a className="nav-link">
-                Logout
-              </a>
+              <a className="nav-link">Logout</a>
             </li>
           </ul>
         </div>

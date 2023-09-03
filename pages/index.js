@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from './components/layout';
 import { useEffect, useState } from 'react';
 import { getEmployeeManagement } from '../services/employee-management';
+import Auth from './protected/auth';
 
 function App() {
   const [employeeManagements, setEmployeeManagements] = useState([]);
@@ -29,4 +30,4 @@ function App() {
   );
 }
 
-export default App;
+export default Auth(App);

@@ -1,15 +1,18 @@
 import React from "react";
 import { useState } from "react";
 import { useRouter } from "next/router"
+import { login } from "../../services/login";
+import noAuth from "../protected/noAuth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter()
 
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log("Logging in with:", email, password);
+  const handleLogin = async () => {
+    const data = await login(email, password)
+    console.log(data,'dataaaaaa')
+    if(data) router.push("/")
   };
   const goToRegister = () => {
     // Use router.push to navigate to the registration page
@@ -80,4 +83,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default noAuth(Login);

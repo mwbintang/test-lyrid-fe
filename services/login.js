@@ -1,4 +1,24 @@
+import api from "../api";
+
 export async function login(identifier, password) {
-    if(identifier == "admin" && password =="admin") return true
-    else return false
+  try {
+    const { data } = await api({
+      method: "post",
+      url: "login",
+      data: {
+        email:identifier,
+        password,
+      },
+    });
+
+    if (data) {
+      localStorage.setItem("token", data.jwt);
+      localStorage.setItem("id", data.id);
+      localStorage.setItem("role", data.role);
+      return true;
+    }
+  } catch (e) {
+    console.log(e, "error");
+    return false;
+  }
 }

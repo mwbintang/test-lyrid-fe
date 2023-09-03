@@ -2,6 +2,7 @@ import React from 'react';
 import Layout from '../components/layout';
 import { getUserManagement } from '../../services/user-management';
 import { useState, useEffect } from 'react';
+import Auth from '../protected/auth';
 
 function userManagement() {
   const [userManagements, setUserManagements] = useState([]);
@@ -29,4 +30,4 @@ function userManagement() {
   );
 }
 
-export default userManagement;
+export default Auth(userManagement);
